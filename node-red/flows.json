@@ -1,0 +1,226 @@
+[
+    {
+        "id": "bbeb144c233acdbb",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "95d0cbba9a418fb9",
+        "type": "inject",
+        "z": "bbeb144c233acdbb",
+        "name": "Vaga A",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "A",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "2c2de399201710c2"
+            ]
+        ]
+    },
+    {
+        "id": "bd9d249eda2cc33d",
+        "type": "mqtt in",
+        "z": "bbeb144c233acdbb",
+        "name": "subscribe",
+        "topic": "topic/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "447fbdbba8e27ce6",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "64363e63604edcca"
+            ]
+        ]
+    },
+    {
+        "id": "f8c86340b552cd2a",
+        "type": "mqtt out",
+        "z": "bbeb144c233acdbb",
+        "name": "publish",
+        "topic": "topic/sensor",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "447fbdbba8e27ce6",
+        "x": 900,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "e7af16e335255233",
+        "type": "inject",
+        "z": "bbeb144c233acdbb",
+        "name": "Vaga B",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "B",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "2c2de399201710c2"
+            ]
+        ]
+    },
+    {
+        "id": "2c2de399201710c2",
+        "type": "function",
+        "z": "bbeb144c233acdbb",
+        "name": "function - publish",
+        "func": "if(msg.topic == 'A') {\n    if (global.vagaA == 1) {\n        global.vagaA = 0;\n    } else {\n        global.vagaA = 1\n    }\n} else {\n    if (global.vagaB == 1) {\n        global.vagaB = 0;\n    } else {\n        global.vagaB = 1\n    }\n}\n\nif (global.vagaA == 1 && global.vagaB == 1) {\n    msg.payload = 'X'\n} else if (global.vagaA == 1) {\n    msg.payload = 'B'\n} else if (global.vagaB == 1) {\n    msg.payload = 'A'\n} else {\n    msg.payload = 'AB';\n}\n\nmsg.vagaA = global.vagaA;\nmsg.vagaB = global.vagaB;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 260,
+        "wires": [
+            [
+                "f8c86340b552cd2a"
+            ]
+        ]
+    },
+    {
+        "id": "ab9eefeb6f9f8854",
+        "type": "ui_text",
+        "z": "bbeb144c233acdbb",
+        "group": "173db355fe88fbae",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Vaga B",
+        "format": "{{msg.vagaB}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 880,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "01690a21ec4df525",
+        "type": "ui_text",
+        "z": "bbeb144c233acdbb",
+        "group": "173db355fe88fbae",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Vaga A",
+        "format": "{{msg.vagaA}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 880,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "64363e63604edcca",
+        "type": "function",
+        "z": "bbeb144c233acdbb",
+        "name": "function - subscribe",
+        "func": "msg.vagaA = 'Livre';\nmsg.vagaB = 'Livre';\n\nif(msg.payload == 'A'){\n    msg.vagaB = 'Ocupado';\n} else if (msg.payload == 'B') {\n    msg.vagaA = 'Ocupado';\n} else if(msg.payload == 'X') {\n    msg.vagaA = 'Ocupado';\n    msg.vagaB = 'Ocupado';\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 480,
+        "wires": [
+            [
+                "01690a21ec4df525",
+                "ab9eefeb6f9f8854"
+            ]
+        ]
+    },
+    {
+        "id": "447fbdbba8e27ce6",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "173db355fe88fbae",
+        "type": "ui_group",
+        "name": "PS",
+        "tab": "dc3e7f8d237aebdb",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dc3e7f8d237aebdb",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
