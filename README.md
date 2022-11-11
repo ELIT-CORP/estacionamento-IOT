@@ -2,11 +2,11 @@
 
 **Nome dos integrantes:**
  
-Aline Satie Kamo – RM82949
-José Ventura Morais Junior – RM83867
-Matheus Sena Silva – RM82870
-Pedro Chaves Martins – RM83518
-Vinicius de Souza Scarabelli – RM83308
+- Aline Satie Kamo – RM82949
+- José Ventura Morais Junior – RM83867
+- Matheus Sena Silva – RM82870
+- Pedro Chaves Martins – RM83518
+- Vinicius de Souza Scarabelli – RM83308
 
 **Turma:**
 SIA
